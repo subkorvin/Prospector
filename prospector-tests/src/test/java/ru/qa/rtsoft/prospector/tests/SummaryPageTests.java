@@ -29,4 +29,11 @@ public class SummaryPageTests extends TestBase {
     boolean meterStatus = hb.isElementPresent(By.xpath("//tr[.//div[. = 'Meter Status']]"));
     Assert.assertTrue(meterStatus);
   }
+
+  @Test
+  public void testEventsSectionPresent() {
+    HelperBase hb = new HelperBase(app);
+    boolean eventsStatus = hb.isElementPresent(By.xpath("//tr[.//div[. = 'Events Status']]"));
+    Assert.assertTrue(eventsStatus);
+  }
 }
