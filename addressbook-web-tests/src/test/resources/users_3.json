@@ -1,0 +1,53 @@
+[
+  {
+    "id": 2147483647,
+    "first_name": "Vasia",
+    "middle_name": "Yu",
+    "family_name": "Ivanov 0",
+    "nickname": "VasyaPro 0",
+    "company": "NIICHAVO",
+    "address": "Moscow, tup. Kommunizma, 13",
+    "home_phone": "+7 495 1234567",
+    "cell_phone": "+7 916 1234567",
+    "work_phone": "+7 499 1234567",
+    "email": "vasya@pupkin.ru",
+    "email2": "vasya_pro@mail.ru",
+    "email3": "super.vasya@gmail.com",
+    "group": "Test1",
+    "photo": "src\\test\\resources\\11698799_crop.jpg"
+  },
+  {
+    "id": 2147483647,
+    "first_name": "Vasia",
+    "middle_name": "Yu",
+    "family_name": "Ivanov 1",
+    "nickname": "VasyaPro 1",
+    "company": "NIICHAVO",
+    "address": "Moscow, tup. Kommunizma, 13",
+    "home_phone": "+7 495 1234567",
+    "cell_phone": "+7 916 1234567",
+    "work_phone": "+7 499 1234567",
+    "email": "vasya@pupkin.ru",
+    "email2": "vasya_pro@mail.ru",
+    "email3": "super.vasya@gmail.com",
+    "group": "Test1",
+    "photo": "src\\test\\resources\\11698799_crop.jpg"
+  },
+  {
+    "id": 2147483647,
+    "first_name": "Vasia",
+    "middle_name": "Yu",
+    "family_name": "Ivanov 2",
+    "nickname": "VasyaPro 2",
+    "company": "NIICHAVO",
+    "address": "Moscow, tup. Kommunizma, 13",
+    "home_phone": "+7 495 1234567",
+    "cell_phone": "+7 916 1234567",
+    "work_phone": "+7 499 1234567",
+    "email": "vasya@pupkin.ru",
+    "email2": "vasya_pro@mail.ru",
+    "email3": "super.vasya@gmail.com",
+    "group": "Test1",
+    "photo": "src\\test\\resources\\11698799_crop.jpg"
+  }
+]

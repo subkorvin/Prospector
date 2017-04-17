@@ -1,0 +1,26 @@
+<list>
+  <user>
+    <first__name>User 0</first__name>
+    <middle__name>Mn 
+0</middle__name>
+    <family__name>Ivanov 
+0</family__name>
+    <group>Test1</group>
+  </user>
+  <user>
+    <first__name>User 1</first__name>
+    <middle__name>Mn 
+1</middle__name>
+    <family__name>Ivanov 
+1</family__name>
+    <group>Test1</group>
+  </user>
+  <user>
+    <first__name>User 2</first__name>
+    <middle__name>Mn 
+2</middle__name>
+    <family__name>Ivanov 
+2</family__name>
+    <group>Test1</group>
+  </user>
+</list>
