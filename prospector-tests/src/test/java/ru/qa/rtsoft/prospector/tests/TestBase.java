@@ -42,22 +42,22 @@ public class TestBase {
     return app;
   }
 
-  public boolean isIssueOpen(int issueId) throws MalformedURLException, ServiceException, RemoteException {
-    MantisConnectPortType mc = app.soap().getMantisConnect();
-    SoapTests st = new SoapTests();
-    int issuedId = st.getIssueId(issueId);
-    IssueData issue = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(issuedId));
-    ObjectRef resolution = issue.getResolution();
-    if (!Objects.equals(resolution.getName(), "fixed")) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+//  public boolean isIssueOpen(int issueId) throws MalformedURLException, ServiceException, RemoteException {
+//    MantisConnectPortType mc = app.soap().getMantisConnect();
+//    SoapTests st = new SoapTests();
+//    int issuedId = st.getIssueId(issueId);
+//    IssueData issue = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(issuedId));
+//    ObjectRef resolution = issue.getResolution();
+//    if (!Objects.equals(resolution.getName(), "fixed")) {
+//      return true;
+//    } else {
+//      return false;
+//    }
+//  }
 
-  public void skipIfNotFixed(int issueId) throws RemoteException, ServiceException, MalformedURLException {
-    if (isIssueOpen(issueId)) {
-      throw new SkipException("Ignored because of issue " + issueId);
-    }
-  }
+//  public void skipIfNotFixed(int issueId) throws RemoteException, ServiceException, MalformedURLException {
+//    if (isIssueOpen(issueId)) {
+//      throw new SkipException("Ignored because of issue " + issueId);
+//    }
+//  }
 }

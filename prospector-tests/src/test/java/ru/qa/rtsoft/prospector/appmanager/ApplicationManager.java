@@ -9,6 +9,7 @@ import org.openqa.selenium.remote.BrowserType;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -22,14 +23,10 @@ public class ApplicationManager {
   private WebDriver wd;
 
   private String browser;
-  private RegistrationHelper registrationHelper;
-  private FtpHelper ftp;
-  private MailHelper mailHelper;
-  private DbHelper dbHelper;
   private SessionHelper sessionHelper;
   private NavigationHelper navigationHelper;
-  private JamesHelper jamesHelper;
-  private SoapHelper soapHelper;
+  private SqlServerDbHelper sqlServerDbHelper;
+  private FindHelper findHelper;
 
 
   public ApplicationManager(String browser) {
@@ -49,26 +46,23 @@ public class ApplicationManager {
     }
   }
 
-  public HttpSession newSession() {
-    return new HttpSession(this);
-  }
-
   public String getProperty(String key) {
     return properties.getProperty(key);
   }
 
-  public RegistrationHelper registration() {
-    if (registrationHelper == null) {
-      registrationHelper = new RegistrationHelper(this);
-    }
-    return registrationHelper;
-  }
 
   public SessionHelper session() {
     if (sessionHelper == null) {
       sessionHelper = new SessionHelper(this);
     }
     return sessionHelper;
+  }
+
+  public FindHelper find() {
+    if (findHelper == null) {
+      findHelper = new FindHelper(this);
+    }
+    return findHelper;
   }
 
   public NavigationHelper goTo() {
@@ -78,39 +72,12 @@ public class ApplicationManager {
     return navigationHelper;
   }
 
-  public DbHelper db() {
-    if (dbHelper == null) {
-      dbHelper = new DbHelper(this);
-    }
-    return dbHelper;
-  }
 
-  public FtpHelper ftp() {
-    if (ftp == null) {
-      ftp = new FtpHelper(this);
+  public SqlServerDbHelper sql() throws SQLException, ClassNotFoundException {
+    if (sqlServerDbHelper == null) {
+      sqlServerDbHelper = new SqlServerDbHelper(this);
     }
-    return ftp;
-  }
-
-  public MailHelper mail() {
-    if (mailHelper == null) {
-      mailHelper = new MailHelper(this);
-    }
-    return mailHelper;
-  }
-
-  public JamesHelper james() {
-    if (jamesHelper == null) {
-      jamesHelper = new JamesHelper(this);
-    }
-    return jamesHelper;
-  }
-
-  public SoapHelper soap() {
-    if (soapHelper == null) {
-      soapHelper = new SoapHelper(this);
-    }
-    return soapHelper;
+    return sqlServerDbHelper;
   }
 
   public WebDriver getDriver() {

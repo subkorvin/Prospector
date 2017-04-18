@@ -12,6 +12,12 @@ public class NavigationHelper extends HelperBase{
     super(app);
   }
 
+  public void openSummarySettings(){
+    click(By.cssSelector("a[ng-click='scope.showEditSettingsWindow()']"));
+  }
+
+
+
   public void groupPage() {
     if (isElementPresent(By.tagName("h1"))
             && wd.findElement(By.tagName("h1")).getText().equals("Groups")
@@ -33,9 +39,5 @@ public class NavigationHelper extends HelperBase{
       click(By.xpath("//a[contains(@href, 'manage_user_page.php')]"));
       click(By.xpath("//a[contains(text(),'" + username + "')]"));
       click(By.cssSelector("input[value='Reset Password']"));
-  }
-
-  public void mainPage() {
-
   }
 }
