@@ -16,6 +16,10 @@ public class NavigationHelper extends HelperBase{
     click(By.cssSelector("a[ng-click='scope.showEditSettingsWindow()']"));
   }
 
+  public void closeSummarySettingsByCancel() {
+    click(By.cssSelector("button[ng-click='scope.close()']"));
+  }
+
 
 
   public void groupPage() {

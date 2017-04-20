@@ -18,6 +18,10 @@ public class SessionHelper extends HelperBase {
     click(By.cssSelector("input[value='Sign In']"));
   }
 
+  public void logout() {
+    click(By.cssSelector("a[ng-click='scope.logout()']"));
+  }
+
   public void changePassword(String confirmationLink, String password) {
     wd.get(confirmationLink);
     type(By.name("password"), password);

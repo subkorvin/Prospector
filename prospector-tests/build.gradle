@@ -4,6 +4,10 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    agent
+}
+
 dependencies {
     compile 'org.testng:testng:6.10'
     compile 'org.seleniumhq.selenium:selenium-java:2.53.1'
@@ -16,6 +20,8 @@ dependencies {
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
     compile 'biz.futureware.mantis:mantis-axis-soap-client:1.2.19'
     compile 'com.microsoft.sqlserver:mssql-jdbc:6.1.6.jre8-preview'
+    agent "org.aspectj:aspectjweaver:1.8.0"
+    compile "ru.yandex.qatools.allure:allure-testng-adaptor:1.4.0.RC4"
 }
 
 test {
@@ -32,4 +38,8 @@ test {
     if (project.hasProperty('vrifyUI')) {
         systemProperty 'vrifyUI', "${vrifyUI}"
     }
+}
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
 }

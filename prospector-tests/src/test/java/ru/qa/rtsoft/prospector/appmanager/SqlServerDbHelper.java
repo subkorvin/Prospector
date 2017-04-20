@@ -17,7 +17,7 @@ public class SqlServerDbHelper {
     String password = "jvbrhjy_1";
     String url = "jdbc:sqlserver://192.168.14.31;databaseName=NES_Core";
 
-//    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+    Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     conn = DriverManager.getConnection(url, userName, password);
   }
 

@@ -55,13 +55,22 @@ public class FindHelper extends HelperBase {
     }
   }
 
-  public String getGatewayCountFromUI() {
+  public String getGatewayCountFromUI() throws InterruptedException {
+    Thread.sleep(3000);
     String gatewayCount = wd.findElement(By.cssSelector("div[ng-bind='scope.enabledDataConcentrationsCount']")).getAttribute("innerHTML");
     return gatewayCount;
   }
 
+  public String getMeterCountFromUI() throws InterruptedException {
+    Thread.sleep(3000);
+    String meterCount = wd.findElement(By.cssSelector("div[ng-bind='scope.metersCount']")).getAttribute("innerHTML");
+    return meterCount;
+  }
+
   public List getSummarySettingsFromUI() {
     List<String> listSettings = new ArrayList<String>();
+    int timeFrameDimensionMultiplier = 0;
+    int subIntervalDimentionMultiplier;
     String timeFrameValue = wd.findElement(By.cssSelector("input[ng-model='scope.SummaryConfiguration.TimeframeInterval']")).getAttribute("value");
     String subIntervalValue = wd.findElement(By.cssSelector("input[ng-model='scope.SummaryConfiguration.TimeframeSubInterval']")).getAttribute("value");
     WebElement timeFrameSection = wd.findElement(By.xpath("//tr[.//span[. = 'Display Timeframe:']]"));
@@ -75,20 +84,57 @@ public class FindHelper extends HelperBase {
     return listSettings;
   }
 
-  public int gatewayBars() throws InterruptedException {
+  public List makeMultipliers() {
+    List<Integer> multiplier = new ArrayList<Integer>();
+    String timeFrameDimension = getSummarySettingsFromUI().get(2).toString();
+    String subIntervalDimention = getSummarySettingsFromUI().get(3).toString();
+    int timeFrameDimensionMultiplier = 0;
+    int subIntervalDimentionMultiplier = 0;
+    switch (timeFrameDimension){
+      case "Minute(s)":
+        timeFrameDimensionMultiplier = 1;
+        break;
+      case "Hour(s)":
+        timeFrameDimensionMultiplier = 60;
+        break;
+      case "Day(s)":
+        timeFrameDimensionMultiplier = 60 * 24;
+        break;
+    }
+    switch (subIntervalDimention){
+      case "Minute(s)":
+        subIntervalDimentionMultiplier = 1;
+        break;
+      case "Hour(s)":
+        subIntervalDimentionMultiplier = 60;
+        break;
+      case "Day(s)":
+        subIntervalDimentionMultiplier = 60 * 24;
+        break;
+    }
+    multiplier.add(timeFrameDimensionMultiplier);
+    multiplier.add(subIntervalDimentionMultiplier);
+    return multiplier;
+  }
+
+  public List gatewayBarsCount() throws InterruptedException {
     Thread.sleep(3000);
 //    WebDriverWait wait = new WebDriverWait(wd, 10/*seconds*/);
-//    WebElement element = wait.until((WebDriver d) -> d.findElement(By.cssSelector("a[ng-click='scope.openprospectorMenu()']")));
+//    WebElement element = wait.until((WebDriver d) -> d.findElement(By.cssSelector("svg[chart-data='scope.cumulativeDcCommunicationStatus']")));
+    List<Integer> counts = new ArrayList<Integer>();
     WebElement barSection = wd.findElement(By.cssSelector("svg[chart-data='scope.cumulativeDcCommunicationStatus']"));
     List<WebElement> bars = barSection.findElements(By.cssSelector("rect"));
-    int count = 0;
+    int countFull = bars.size();
+    int countEnabled = 0;
     for (WebElement bar : bars) {
       int height = Integer.parseInt(bar.getAttribute("height"));
       if (height > 0) {
-        count++;
+        countEnabled++;
       }
     }
-    return count;
+    counts.add(countFull);
+    counts.add(countEnabled);
+    return counts;
   }
 
   public void toHomePage() {
