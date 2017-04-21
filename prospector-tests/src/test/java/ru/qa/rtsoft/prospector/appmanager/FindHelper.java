@@ -2,7 +2,6 @@ package ru.qa.rtsoft.prospector.appmanager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class FindHelper extends HelperBase {
     } else return false;
   }
 
-  public boolean findGatewaysLegend() {
+  public boolean findGatewayPieLegend() {
     if (isElementPresent(By.xpath("//td[. = 'Communicated Today']")) && isElementPresent(By.xpath("//td[. = 'Not Communicated Today']"))) {
       return true;
     } else return false;
@@ -78,8 +77,7 @@ public class FindHelper extends HelperBase {
     return listSettings;
   }
 
-  public List makeMultipliers() {
-    List<Integer> multiplier = new ArrayList<Integer>();
+  public int barChartCount() {
     String timeFrameDimension = getSummarySettingsFromUI().get(2).toString();
     String subIntervalDimention = getSummarySettingsFromUI().get(3).toString();
     int timeFrameDimensionMultiplier = 0;
@@ -106,9 +104,10 @@ public class FindHelper extends HelperBase {
         subIntervalDimentionMultiplier = 60 * 24;
         break;
     }
-    multiplier.add(timeFrameDimensionMultiplier);
-    multiplier.add(subIntervalDimentionMultiplier);
-    return multiplier;
+    int timeFrame = Integer.parseInt(getSummarySettingsFromUI().get(0).toString()) * timeFrameDimensionMultiplier;
+    int subInterval = Integer.parseInt(getSummarySettingsFromUI().get(1).toString()) * subIntervalDimentionMultiplier;
+    int barsChartCount = timeFrame / subInterval;
+    return barsChartCount;
   }
 
   public List gatewayBarsCount() throws InterruptedException {
@@ -143,5 +142,36 @@ public class FindHelper extends HelperBase {
     click(By.xpath("//a[contains(@href, 'manage_user_page.php')]"));
     click(By.xpath("//a[contains(text(),'" + username + "')]"));
     click(By.cssSelector("input[value='Reset Password']"));
+  }
+
+  public boolean findMeterPieLegend() {
+    if (isElementPresent(By.cssSelector("td[class='legend-box'][title^='Enabled:']"))
+            && isElementPresent(By.cssSelector("td[class='pro-page-summary-chart-legenda cursor-pointer'][title^='Enabled:']"))
+            && isElementPresent(By.cssSelector("td[class='legend-box'][title^='Add Pending:']"))
+            && isElementPresent(By.cssSelector("td[class='pro-page-summary-chart-legenda cursor-pointer'][title^='Add Pending:']"))
+            && isElementPresent(By.cssSelector("td[class='legend-box'][title^='Commissioned:']"))
+            && isElementPresent(By.cssSelector("td[class='pro-page-summary-chart-legenda cursor-pointer'][title^='Commissioned:']"))
+            && isElementPresent(By.cssSelector("td[class='legend-box'][title^='Add Failed:']"))
+            && isElementPresent(By.cssSelector("td[class='pro-page-summary-chart-legenda cursor-pointer'][title^='Add Failed:']"))
+            && isElementPresent(By.cssSelector("td[class='legend-box'][title^='Remove Pending:']"))
+            && isElementPresent(By.cssSelector("td[class='pro-page-summary-chart-legenda cursor-pointer'][title^='Remove Pending:']"))) {
+      return true;
+    } else return false;
+  }
+
+  public List meterBarsCount() throws InterruptedException {
+    Thread.sleep(3000);
+    List<Integer> counts = new ArrayList<Integer>();
+    WebElement barSection = wd.findElement(By.cssSelector("svg[chart-data='scope.cumulativeMeterData']"));
+
+    return null;
+  }
+
+  public List summarySettingsCheckboxesState() {
+    if (isElementChecked(By.cssSelector("input[type='checkbox'][ng-model^='scope.SummaryConfiguration'][ng-model='scope.SummaryConfiguration.ShowAllGateways']"))){
+      String showAllGateways = "checked";
+      return;
+    }
+    return null;
   }
 }

@@ -1,7 +1,6 @@
 package ru.qa.rtsoft.prospector.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 /**
  * Created by korvin on 20.02.2017.

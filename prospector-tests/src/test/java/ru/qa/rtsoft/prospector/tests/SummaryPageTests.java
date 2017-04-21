@@ -5,10 +5,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import ru.qa.rtsoft.prospector.appmanager.HelperBase;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -75,8 +73,8 @@ public class SummaryPageTests extends TestBase {
   }
 
   @Test
-  public void testGatewaysLegendPresent() {
-    assertTrue(app.find().findGatewaysLegend());
+  public void testGatewayPieLegendPresent() {
+    assertTrue(app.find().findGatewayPieLegend());
   }
 
   @Test
@@ -85,16 +83,31 @@ public class SummaryPageTests extends TestBase {
   }
 
   @Test
+  public void testMeterPieLegendPresent(){
+    assertTrue(app.find().findMeterPieLegend());
+  }
+
+
+
+  @Test
   public void checkGatewayBarsCount() throws InterruptedException {
     app.goTo().openSummarySettings();
     app.find().getSummarySettingsFromUI();
     int countGatewayBarsFromUI = Integer.parseInt(app.find().gatewayBarsCount().get(0).toString()) / 2; // each bar-chart has two bars
-    int timeFrameInMinutes = Integer.parseInt(app.find().getSummarySettingsFromUI().get(0).toString()) * Integer.parseInt(app.find().makeMultipliers().get(0).toString());
-    int subIntervalInMinutes = Integer.parseInt(app.find().getSummarySettingsFromUI().get(1).toString()) * Integer.parseInt(app.find().makeMultipliers().get(1).toString());
-    int countGatewayBarsFromSettings = timeFrameInMinutes / subIntervalInMinutes;
+    int barCountFromSettings = app.find().barChartCount();
     app.goTo().closeSummarySettingsByCancel();
-    assertEquals(countGatewayBarsFromUI, countGatewayBarsFromSettings);
+    assertEquals(countGatewayBarsFromUI, barCountFromSettings);
   }
+
+//  @Test
+//  public void checkMaterBarsCount() {
+//    app.goTo().openSummarySettings();
+//    app.find().getSummarySettingsFromUI();
+//    int countMeterBarsFromUI = Integer.parseInt(app.find().meterBarsCount().get(0).toString()) / 2; // each bar-chart has two bars
+//    int barCountFromSettings = app.find().barChartCount();
+//    app.goTo().closeSummarySettingsByCancel();
+//    assertEquals(countMeterBarsFromUI, barCountFromSettings);
+//  }
 
   @Test
   public void checkGatewaySummaryCounts() throws InterruptedException, SQLException, ClassNotFoundException {

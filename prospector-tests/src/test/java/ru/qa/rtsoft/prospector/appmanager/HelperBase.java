@@ -64,4 +64,19 @@ public class HelperBase {
       return false;
     }
   }
+
+  public boolean isElementChecked(By locator) {
+    isElementPresent(locator);
+    //input[type="checkbox"][ng-model^="scope.SummaryConfiguration"] локаторы для чекбоксов
+    if (Objects.equals(wd.findElement(locator).getAttribute("checked"), "checked")) {
+      return true;
+    } else return false;
+  }
+
+  public boolean isElementDisabled(By locator) {
+    isElementPresent(locator);
+    if (Objects.equals(wd.findElement(locator).getAttribute("disabled"), "disabled")) {
+      return true;
+    } else return false;
+  }
 }
