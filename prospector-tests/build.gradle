@@ -18,10 +18,11 @@ dependencies {
     compile 'ch.qos.logback:logback-classic:1.2.2'
     compile 'mysql:mysql-connector-java:6.0.6'
     compile 'org.hibernate:hibernate-core:5.2.9.Final'
-    compile 'biz.futureware.mantis:mantis-axis-soap-client:1.2.19'
     compile 'com.microsoft.sqlserver:mssql-jdbc:6.1.6.jre8-preview'
     agent "org.aspectj:aspectjweaver:1.8.0"
-    compile "ru.yandex.qatools.allure:allure-testng-adaptor:1.4.0.RC4"
+    compile ('ru.yandex.qatools.allure:allure-testng-adaptor:1.4.0.RC4'){
+        exclude group: 'org.slf4j'
+    }
 }
 
 test {

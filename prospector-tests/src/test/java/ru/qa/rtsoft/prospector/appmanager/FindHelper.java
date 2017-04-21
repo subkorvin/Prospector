@@ -1,9 +1,7 @@
 package ru.qa.rtsoft.prospector.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +20,7 @@ public class FindHelper extends HelperBase {
     WebElement pie = section.findElement(By.cssSelector("svg[class='pro-chart-pie']"));
     if (pie != null) {
       return true;
-    } else {
-      return false;
-    }
+    } else return false;
   }
 
   public boolean findMeterPieCharts() {
@@ -32,9 +28,7 @@ public class FindHelper extends HelperBase {
     WebElement pie = section.findElement(By.cssSelector("svg[class='pro-chart-pie']"));
     if (pie != null) {
       return true;
-    } else {
-      return false;
-    }
+    } else return false;
   }
 
   public boolean findEventPieCharts() {
@@ -42,17 +36,19 @@ public class FindHelper extends HelperBase {
     WebElement pie = section.findElement(By.cssSelector("svg[class='pro-chart-pie']"));
     if (pie != null) {
       return true;
-    } else {
-      return false;
-    }
+    } else return false;
   }
 
   public boolean findGatewaysLegend() {
     if (isElementPresent(By.xpath("//td[. = 'Communicated Today']")) && isElementPresent(By.xpath("//td[. = 'Not Communicated Today']"))) {
       return true;
-    } else {
-      return false;
-    }
+    } else return false;
+  }
+
+  public boolean findGatewayBarsLegend(){
+    if (isElementPresent(By.xpath("//span[. = 'Succeeded']")) && isElementPresent(By.xpath("//span[. = 'Failed']"))) {
+      return true;
+    } else return false;
   }
 
   public String getGatewayCountFromUI() throws InterruptedException {
@@ -69,8 +65,6 @@ public class FindHelper extends HelperBase {
 
   public List getSummarySettingsFromUI() {
     List<String> listSettings = new ArrayList<String>();
-    int timeFrameDimensionMultiplier = 0;
-    int subIntervalDimentionMultiplier;
     String timeFrameValue = wd.findElement(By.cssSelector("input[ng-model='scope.SummaryConfiguration.TimeframeInterval']")).getAttribute("value");
     String subIntervalValue = wd.findElement(By.cssSelector("input[ng-model='scope.SummaryConfiguration.TimeframeSubInterval']")).getAttribute("value");
     WebElement timeFrameSection = wd.findElement(By.xpath("//tr[.//span[. = 'Display Timeframe:']]"));

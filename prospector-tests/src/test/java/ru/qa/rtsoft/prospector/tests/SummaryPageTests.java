@@ -80,6 +80,11 @@ public class SummaryPageTests extends TestBase {
   }
 
   @Test
+  public void testGatewayBarsLegendPresent(){
+    assertTrue(app.find().findGatewayBarsLegend());
+  }
+
+  @Test
   public void checkGatewayBarsCount() throws InterruptedException {
     app.goTo().openSummarySettings();
     app.find().getSummarySettingsFromUI();

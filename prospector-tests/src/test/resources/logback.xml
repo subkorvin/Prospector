@@ -3,7 +3,7 @@
     <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>d:\My files\Documents\GitHub\Logs\test-mantis-${bySecond}.log</file>
+        <file>d:\My files\Documents\Prospector\Prospector_tests_logs\test-prospector-${bySecond}.log</file>
         <append>true</append>
         <!-- set immediateFlush to false for much higher logging throughput -->
         <immediateFlush>true</immediateFlush>
