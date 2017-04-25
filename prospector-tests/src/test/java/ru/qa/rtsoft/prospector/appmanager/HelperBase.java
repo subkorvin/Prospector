@@ -68,7 +68,8 @@ public class HelperBase {
   public boolean isElementChecked(By locator) {
     isElementPresent(locator);
     //input[type="checkbox"][ng-model^="scope.SummaryConfiguration"] локаторы для чекбоксов
-    if (Objects.equals(wd.findElement(locator).getAttribute("checked"), "checked")) {
+    if (Objects.equals(wd.findElement(locator).getAttribute("checked"), "true")) {
+
       return true;
     } else return false;
   }

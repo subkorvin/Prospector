@@ -5,8 +5,12 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import ru.qa.rtsoft.prospector.appmanager.HelperBase;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
@@ -16,8 +20,9 @@ import static org.testng.Assert.assertTrue;
 public class SummaryPageTests extends TestBase {
 
   @BeforeClass
-  public void login() {
+  public void login() throws InterruptedException {
     app.session().loginAsAdmin();
+    Thread.sleep(3000);
   }
 
   @AfterClass
@@ -25,6 +30,8 @@ public class SummaryPageTests extends TestBase {
     app.session().logout();
   }
 
+
+  // Sections
   @Test
   public void testGatewaysSectionPresent() {
     HelperBase hb = new HelperBase(app);
@@ -46,6 +53,7 @@ public class SummaryPageTests extends TestBase {
     assertTrue(eventsSection);
   }
 
+  //Pie charts
   @Test
   public void testGatewayPiePresent() {
     assertTrue(app.find().findGatewayPieCharts());
@@ -61,62 +69,110 @@ public class SummaryPageTests extends TestBase {
     assertTrue(app.find().findEventPieCharts());
   }
 
-  @Test (enabled = false)
-  public void checkSummarySettings() {
-    app.goTo().openSummarySettings();
-    app.find().getSummarySettingsFromUI();
-    int timeFrameValue = Integer.parseInt(app.find().getSummarySettingsFromUI().get(0).toString());
-    int subIntervalValue = Integer.parseInt(app.find().getSummarySettingsFromUI().get(1).toString());
-    String timeFrameDimention = app.find().getSummarySettingsFromUI().get(2).toString();
-    String subIntervalDimention = app.find().getSummarySettingsFromUI().get(3).toString();
 
-  }
-
+  //Pie charts legends
   @Test
   public void testGatewayPieLegendPresent() {
     assertTrue(app.find().findGatewayPieLegend());
   }
 
   @Test
-  public void testGatewayBarsLegendPresent(){
+  public void testGatewayBarsLegendPresent() {
     assertTrue(app.find().findGatewayBarsLegend());
   }
 
   @Test
-  public void testMeterPieLegendPresent(){
+  public void testMeterPieLegendPresent() {
     assertTrue(app.find().findMeterPieLegend());
   }
 
 
 
+  @Test(enabled = false)
+  public void checkSummarySettings() {
+    app.goTo().openSummarySettings();
+    app.find().getSummarySettings();
+    int timeFrameValue = Integer.parseInt(app.find().getSummarySettings().get(0).toString());
+    int subIntervalValue = Integer.parseInt(app.find().getSummarySettings().get(1).toString());
+    String timeFrameDimention = app.find().getSummarySettings().get(2).toString();
+    String subIntervalDimention = app.find().getSummarySettings().get(3).toString();
+
+  }
+
+  // Bars
   @Test
   public void checkGatewayBarsCount() throws InterruptedException {
     app.goTo().openSummarySettings();
-    app.find().getSummarySettingsFromUI();
-    int countGatewayBarsFromUI = Integer.parseInt(app.find().gatewayBarsCount().get(0).toString()) / 2; // each bar-chart has two bars
+    int countGatewayBarsFromUI = Integer.parseInt(app.find()
+            .barsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeDcCommunicationStatus']"))
+            .get(0).toString()) / 2; // делим пополам потому что каждый бар состоит из двух частей
     int barCountFromSettings = app.find().barChartCount();
     app.goTo().closeSummarySettingsByCancel();
     assertEquals(countGatewayBarsFromUI, barCountFromSettings);
   }
 
-//  @Test
-//  public void checkMaterBarsCount() {
-//    app.goTo().openSummarySettings();
-//    app.find().getSummarySettingsFromUI();
-//    int countMeterBarsFromUI = Integer.parseInt(app.find().meterBarsCount().get(0).toString()) / 2; // each bar-chart has two bars
-//    int barCountFromSettings = app.find().barChartCount();
-//    app.goTo().closeSummarySettingsByCancel();
-//    assertEquals(countMeterBarsFromUI, barCountFromSettings);
-//  }
+  @Test
+  public void checkMeterBarsCount() throws InterruptedException {
+    app.goTo().openSummarySettings();
+    List<Boolean> profilesFromSettings = app.find().meterProfilesFromSettings();
+    List<Boolean> profilesFiltered = new ArrayList<Boolean>();
+    for (int i=0; i < profilesFromSettings.size(); i++ ){
+      boolean count = profilesFromSettings.get(i);
+      if (count) {
+        profilesFiltered.add(profilesFromSettings.get(i));
+      }
+    }
+    int countMeterBarsFromUI = Integer.parseInt(app.find()
+            .barsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeMeterData']"))
+            .get(0).toString()) / (profilesFiltered.size() + 1) / 2; // дополнительный бар - количество счетчиков, делим на 2 потому что каждый бар состоит из двух частей
+    int barCountFromSettings = app.find().barChartCount();
+    app.goTo().closeSummarySettingsByCancel();
+    assertEquals(countMeterBarsFromUI, barCountFromSettings);
+  }
 
   @Test
-  public void checkGatewaySummaryCounts() throws InterruptedException, SQLException, ClassNotFoundException {
-    int gatewayCountFromUI = Integer.parseInt(app.find().getGatewayCountFromUI());
+  public void checkMeterProfilesState() throws InterruptedException {
+    app.goTo().openSummarySettings();
+    List<Boolean> profilesFromSettings = app.find().meterProfilesFromSettings();
+    app.goTo().closeSummarySettingsByCancel();
+    List<Boolean> profilesFromUI = app.find().getMeterProfilesFromUI();
+    assertEquals(profilesFromSettings, profilesFromUI);
+  }
+
+
+  // Counts
+  @Test
+  public void checkGatewaySummaryCount() throws InterruptedException, SQLException, ClassNotFoundException {
+    int gatewayCountFromUI = Integer.parseInt(app.find().getCountsFromUI(By.cssSelector("div[ng-bind='scope.enabledDataConcentrationsCount']")));
     int gatewayCountFromDB = 0;
     ResultSet result = app.sql().requestResult("select count (*) as count from Gateways");
     while (result.next()) {
       gatewayCountFromDB = result.getInt("count");
     }
     assertEquals(gatewayCountFromUI, gatewayCountFromDB);
+  }
+
+  @Test
+  public void checkMeterSummaryCount() throws InterruptedException, SQLException, ClassNotFoundException {
+    int meterCountFromUI = Integer.parseInt(app.find().getCountsFromUI(By.cssSelector("div[ng-bind='scope.metersCount']")));
+    int meterCountFromDB = 0;
+    ResultSet result = app.sql().requestResult("select count (*) as count from Devices_Meter");
+    while (result.next()) {
+      meterCountFromDB = result.getInt("count");
+    }
+    assertEquals(meterCountFromUI, meterCountFromDB);
+  }
+
+  @Test
+  public void checkCriticalEventsCount() throws SQLException, ClassNotFoundException {
+    int criticalEventsCountFromDB = 0;
+    ResultSet result = app.sql().requestResult("SELECT count (*) as count\n" +
+            "FROM\t[EventHistory]\n" +
+            "\tINNER JOIN [www].[CriticalEventDefinitions] ON [CriticalEventDefinitions].[EventDefinitionID]=[EventHistory].[EventDefinitionID]\n" +
+            "WHERE (CriticalEventDefinitions.[IsCritical] = 1)");
+    while (result.next()) {
+      criticalEventsCountFromDB = result.getInt("count");
+    }
+    System.out.println(criticalEventsCountFromDB);
   }
 }

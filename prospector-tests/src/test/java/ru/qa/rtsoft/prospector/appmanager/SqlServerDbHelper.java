@@ -13,9 +13,9 @@ public class SqlServerDbHelper {
 
   public SqlServerDbHelper(ApplicationManager app) throws SQLException, ClassNotFoundException {
     this.app = app;
-    String userName = "sa";
-    String password = "jvbrhjy_1";
-    String url = "jdbc:sqlserver://192.168.14.31;databaseName=NES_Core";
+    String userName = app.getProperty("sql.adminLogin");
+    String password = app.getProperty("sql.adminPassword");
+    String url = app.getProperty("sql.baseUrl");
 
     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
     conn = DriverManager.getConnection(url, userName, password);
