@@ -27,6 +27,7 @@ public class ApplicationManager {
   private NavigationHelper navigationHelper;
   private SqlServerDbHelper sqlServerDbHelper;
   private FindHelper findHelper;
+  private DataHelper dataHelper;
 
 
   public ApplicationManager(String browser) {
@@ -70,6 +71,13 @@ public class ApplicationManager {
       navigationHelper = new NavigationHelper(this);
     }
     return navigationHelper;
+  }
+
+  public DataHelper data(){
+    if (dataHelper == null) {
+      dataHelper = new DataHelper(this);
+    }
+    return dataHelper;
   }
 
 

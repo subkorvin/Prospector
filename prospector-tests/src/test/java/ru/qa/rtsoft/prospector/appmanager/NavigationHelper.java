@@ -1,17 +1,20 @@
 package ru.qa.rtsoft.prospector.appmanager;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.awt.*;
 
 /**
  * Created by korvin on 20.02.2017.
  */
-public class NavigationHelper extends HelperBase{
+public class NavigationHelper extends HelperBase {
 
   public NavigationHelper(ApplicationManager app) {
     super(app);
   }
 
-  public void openSummarySettings(){
+  public void openSummarySettings() {
     click(By.cssSelector("a[ng-click='scope.showEditSettingsWindow()']"));
   }
 
@@ -19,7 +22,14 @@ public class NavigationHelper extends HelperBase{
     click(By.cssSelector("button[ng-click='scope.close()']"));
   }
 
-
+  public void openUserSettings() throws AWTException, InterruptedException {
+    click(By.cssSelector("a[ng-click='scope.openprospectorMenu()']"));
+    click(By.xpath("//li[./*[text()[contains(.,'General Settings')]]]"));
+    WebElement generalSettings = wd.findElement(By.xpath("//li[./*[text()[contains(.,'General Settings')]]]"));
+    generalSettings.findElement(By.xpath("//a[text()[contains(.,'General Settings')]]")).click();
+    WebElement element = generalSettings.findElement(By.xpath("//ul[@ng-mouseleave='closeSubMenu(1)']"));
+    element.findElement(By.xpath("//li[./a[text()[contains(.,'User Preferences')]]][@class='pro-list-item ng-scope']")).click();
+  }
 
   public void groupPage() {
     if (isElementPresent(By.tagName("h1"))
@@ -38,9 +48,9 @@ public class NavigationHelper extends HelperBase{
   }
 
   public void manageUsers(String username) {
-      click(By.xpath("//i[@class='menu-icon fa fa-gears']"));
-      click(By.xpath("//a[contains(@href, 'manage_user_page.php')]"));
-      click(By.xpath("//a[contains(text(),'" + username + "')]"));
-      click(By.cssSelector("input[value='Reset Password']"));
+    click(By.xpath("//i[@class='menu-icon fa fa-gears']"));
+    click(By.xpath("//a[contains(@href, 'manage_user_page.php')]"));
+    click(By.xpath("//a[contains(text(),'" + username + "')]"));
+    click(By.cssSelector("input[value='Reset Password']"));
   }
 }

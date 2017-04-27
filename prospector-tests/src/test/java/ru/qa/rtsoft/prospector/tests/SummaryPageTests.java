@@ -91,11 +91,11 @@ public class SummaryPageTests extends TestBase {
   @Test(enabled = false)
   public void checkSummarySettings() {
     app.goTo().openSummarySettings();
-    app.find().getSummarySettings();
-    int timeFrameValue = Integer.parseInt(app.find().getSummarySettings().get(0).toString());
-    int subIntervalValue = Integer.parseInt(app.find().getSummarySettings().get(1).toString());
-    String timeFrameDimention = app.find().getSummarySettings().get(2).toString();
-    String subIntervalDimention = app.find().getSummarySettings().get(3).toString();
+    app.data().getSummarySettings();
+    int timeFrameValue = Integer.parseInt(app.data().getSummarySettings().get(0).toString());
+    int subIntervalValue = Integer.parseInt(app.data().getSummarySettings().get(1).toString());
+    String timeFrameDimention = app.data().getSummarySettings().get(2).toString();
+    String subIntervalDimention = app.data().getSummarySettings().get(3).toString();
 
   }
 
@@ -103,10 +103,10 @@ public class SummaryPageTests extends TestBase {
   @Test
   public void checkGatewayBarsCount() throws InterruptedException {
     app.goTo().openSummarySettings();
-    int countGatewayBarsFromUI = Integer.parseInt(app.find()
-            .barsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeDcCommunicationStatus']"))
+    int countGatewayBarsFromUI = Integer.parseInt(app.data()
+            .getBarsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeDcCommunicationStatus']"))
             .get(0).toString()) / 2; // делим пополам потому что каждый бар состоит из двух частей
-    int barCountFromSettings = app.find().barChartCount();
+    int barCountFromSettings = app.data().getBarChartCount();
     app.goTo().closeSummarySettingsByCancel();
     assertEquals(countGatewayBarsFromUI, barCountFromSettings);
   }
@@ -114,7 +114,7 @@ public class SummaryPageTests extends TestBase {
   @Test
   public void checkMeterBarsCount() throws InterruptedException {
     app.goTo().openSummarySettings();
-    List<Boolean> profilesFromSettings = app.find().meterProfilesFromSettings();
+    List<Boolean> profilesFromSettings = app.data().getMeterProfilesFromSettings();
     List<Boolean> profilesFiltered = new ArrayList<Boolean>();
     for (int i=0; i < profilesFromSettings.size(); i++ ){
       boolean count = profilesFromSettings.get(i);
@@ -122,10 +122,10 @@ public class SummaryPageTests extends TestBase {
         profilesFiltered.add(profilesFromSettings.get(i));
       }
     }
-    int countMeterBarsFromUI = Integer.parseInt(app.find()
-            .barsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeMeterData']"))
+    int countMeterBarsFromUI = Integer.parseInt(app.data()
+            .getBarsCountFromUI(By.cssSelector("svg[chart-data='scope.cumulativeMeterData']"))
             .get(0).toString()) / (profilesFiltered.size() + 1) / 2; // дополнительный бар - количество счетчиков, делим на 2 потому что каждый бар состоит из двух частей
-    int barCountFromSettings = app.find().barChartCount();
+    int barCountFromSettings = app.data().getBarChartCount();
     app.goTo().closeSummarySettingsByCancel();
     assertEquals(countMeterBarsFromUI, barCountFromSettings);
   }
@@ -133,9 +133,9 @@ public class SummaryPageTests extends TestBase {
   @Test
   public void checkMeterProfilesState() throws InterruptedException {
     app.goTo().openSummarySettings();
-    List<Boolean> profilesFromSettings = app.find().meterProfilesFromSettings();
+    List<Boolean> profilesFromSettings = app.data().getMeterProfilesFromSettings();
     app.goTo().closeSummarySettingsByCancel();
-    List<Boolean> profilesFromUI = app.find().getMeterProfilesFromUI();
+    List<Boolean> profilesFromUI = app.data().getMeterProfilesFromUI();
     assertEquals(profilesFromSettings, profilesFromUI);
   }
 
@@ -143,7 +143,7 @@ public class SummaryPageTests extends TestBase {
   // Counts
   @Test
   public void checkGatewaySummaryCount() throws InterruptedException, SQLException, ClassNotFoundException {
-    int gatewayCountFromUI = Integer.parseInt(app.find().getCountsFromUI(By.cssSelector("div[ng-bind='scope.enabledDataConcentrationsCount']")));
+    int gatewayCountFromUI = Integer.parseInt(app.data().getCountsFromUI(By.cssSelector("div[ng-bind='scope.enabledDataConcentrationsCount']")));
     int gatewayCountFromDB = 0;
     ResultSet result = app.sql().requestResult("select count (*) as count from Gateways");
     while (result.next()) {
@@ -154,7 +154,7 @@ public class SummaryPageTests extends TestBase {
 
   @Test
   public void checkMeterSummaryCount() throws InterruptedException, SQLException, ClassNotFoundException {
-    int meterCountFromUI = Integer.parseInt(app.find().getCountsFromUI(By.cssSelector("div[ng-bind='scope.metersCount']")));
+    int meterCountFromUI = Integer.parseInt(app.data().getCountsFromUI(By.cssSelector("div[ng-bind='scope.metersCount']")));
     int meterCountFromDB = 0;
     ResultSet result = app.sql().requestResult("select count (*) as count from Devices_Meter");
     while (result.next()) {
@@ -164,7 +164,19 @@ public class SummaryPageTests extends TestBase {
   }
 
   @Test
-  public void checkCriticalEventsCount() throws SQLException, ClassNotFoundException {
+  public void checkEventsCount() throws InterruptedException, SQLException, ClassNotFoundException {
+    int eventsCountFromUI = Integer.parseInt(app.data().getCountsFromUI(By.cssSelector("div[ng-bind='scope.eventsCount']")));
+    int eventsCountFromDB = 0;
+    ResultSet result = app.sql().requestResult("SELECT count (*) as count FROM EventHistory");
+    while (result.next()) {
+      eventsCountFromDB = result.getInt("count");
+    }
+    assertEquals(eventsCountFromUI, eventsCountFromDB);
+  }
+
+  @Test
+  public void checkCriticalEventsCount() throws SQLException, ClassNotFoundException, InterruptedException {
+    int criticalEventsCountFromUI = Integer.parseInt(app.data().getCountsFromUI(By.cssSelector("div[ng-bind='scope.criticalEventsCount']")));
     int criticalEventsCountFromDB = 0;
     ResultSet result = app.sql().requestResult("SELECT count (*) as count\n" +
             "FROM\t[EventHistory]\n" +
@@ -173,6 +185,14 @@ public class SummaryPageTests extends TestBase {
     while (result.next()) {
       criticalEventsCountFromDB = result.getInt("count");
     }
-    System.out.println(criticalEventsCountFromDB);
+    assertEquals(criticalEventsCountFromUI, criticalEventsCountFromDB);
+  }
+
+
+  //Toolbar items
+
+  @Test
+  public void checkRefreshButton() {
+
   }
 }
