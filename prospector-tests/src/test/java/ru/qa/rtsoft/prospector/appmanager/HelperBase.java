@@ -1,12 +1,10 @@
 package ru.qa.rtsoft.prospector.appmanager;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by korvin on 21.02.2017.
@@ -80,4 +78,12 @@ public class HelperBase {
       return true;
     } else return false;
   }
+
+  public boolean isHierarchySelected(){
+    wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+    if (isElementPresent(By.cssSelector("div[class='part right active'][ng-click='scope.applyHierarchyFilterDefault()']"))){
+      return true;
+    } else return false;
+  }
+
 }

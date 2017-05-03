@@ -2,14 +2,18 @@ package ru.qa.rtsoft.prospector.appmanager;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationManager {
 
   private final Properties properties;
-  private WebDriver wd;
+  public WebDriver wd;
 
   private String browser;
   private SessionHelper sessionHelper;
@@ -94,7 +98,15 @@ public class ApplicationManager {
         wd = new FirefoxDriver();
         wd.manage().window().maximize();
       } else if (Objects.equals(browser, BrowserType.CHROME)) {
-        wd = new ChromeDriver();
+        Map<String, Object> prefs =new HashMap<String, Object>();
+        ChromeOptions option = new ChromeOptions();
+        option.addArguments("disable-infobars");
+        prefs .put("credentials_enable_service", false);
+        prefs .put("profile.password_manager_enabled", false);
+        option.setExperimentalOption("prefs", prefs);
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        capabilities.setCapability(ChromeOptions.CAPABILITY, option);
+        wd = new ChromeDriver(capabilities);
         wd.manage().window().maximize();
       } else if (Objects.equals(browser, BrowserType.IE)) {
         wd = new InternetExplorerDriver();

@@ -31,6 +31,18 @@ public class NavigationHelper extends HelperBase {
     element.findElement(By.xpath("//li[./a[text()[contains(.,'User Preferences')]]][@class='pro-list-item ng-scope']")).click();
   }
 
+  public void clickRefreshButton(){
+    click(By.cssSelector("a[id='refresh']"));
+  }
+
+  public void clickFiltersPanelToggle(){
+    click(By.xpath("//span[. = 'Filters']"));
+  }
+
+  public void clickSystemPanelToggle(){
+    click(By.xpath("//span[. = 'System']"));
+  }
+
   public void groupPage() {
     if (isElementPresent(By.tagName("h1"))
             && wd.findElement(By.tagName("h1")).getText().equals("Groups")

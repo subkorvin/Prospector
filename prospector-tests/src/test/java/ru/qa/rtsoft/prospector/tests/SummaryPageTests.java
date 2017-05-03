@@ -33,21 +33,21 @@ public class SummaryPageTests extends TestBase {
 
   // Sections
   @Test
-  public void testGatewaysSectionPresent() {
+  public void checkGatewaysSectionPresent() {
     HelperBase hb = new HelperBase(app);
     boolean gatewaySection = hb.isElementPresent(By.xpath("//tr[.//div[. = 'Gateway Communication Status']]"));
     assertTrue(gatewaySection);
   }
 
   @Test
-  public void testMetersSectionPresent() {
+  public void checkMetersSectionPresent() {
     HelperBase hb = new HelperBase(app);
     boolean meterSection = hb.isElementPresent(By.xpath("//tr[.//div[. = 'Meter Status']]"));
     assertTrue(meterSection);
   }
 
   @Test
-  public void testEventsSectionPresent() {
+  public void checkEventsSectionPresent() {
     HelperBase hb = new HelperBase(app);
     boolean eventsSection = hb.isElementPresent(By.xpath("//tr[.//div[. = 'Events Status']]"));
     assertTrue(eventsSection);
@@ -55,37 +55,51 @@ public class SummaryPageTests extends TestBase {
 
   //Pie charts
   @Test
-  public void testGatewayPiePresent() {
+  public void checkGatewayPiePresent() {
     assertTrue(app.find().findGatewayPieCharts());
   }
 
   @Test
-  public void testMeterPiePresent() {
+  public void checkMeterPiePresent() {
     assertTrue(app.find().findMeterPieCharts());
   }
 
   @Test
-  public void testEventPiePresent() {
+  public void checkEventPiePresent() {
     assertTrue(app.find().findEventPieCharts());
   }
 
 
   //Pie charts legends
   @Test
-  public void testGatewayPieLegendPresent() {
+  public void checkGatewayPieLegendPresent() {
     assertTrue(app.find().findGatewayPieLegend());
   }
 
   @Test
-  public void testGatewayBarsLegendPresent() {
+  public void checkGatewayBarsLegendPresent() {
     assertTrue(app.find().findGatewayBarsLegend());
   }
 
   @Test
-  public void testMeterPieLegendPresent() {
+  public void checkMeterPieLegendPresent() {
     assertTrue(app.find().findMeterPieLegend());
   }
 
+  @Test
+  public void checkMeterBarLegendPresence(){
+    assertTrue(app.find().findMeterBarLegend());
+  }
+
+  @Test
+  public void checkEventPieLegendPresence(){
+    assertTrue(app.find().findEventPieLegend());
+  }
+
+  @Test
+  public void checkEventBarLegendPresence(){
+    assertTrue(app.find().findEventBarLegend());
+  }
 
 
   @Test(enabled = false)
@@ -192,7 +206,27 @@ public class SummaryPageTests extends TestBase {
   //Toolbar items
 
   @Test
-  public void checkRefreshButton() {
-
+  public void checkRefreshButtonPresence() {
+    assertTrue(app.find().findRefreshButton());
   }
+
+  // Panels
+
+  @Test
+  public void checkFiltersPanelPresence() {
+    if (!app.find().findFiltersPanel()){
+      app.goTo().clickFiltersPanelToggle();
+    }
+    assertTrue(app.find().findFiltersPanel());
+  }
+
+  @Test
+  public void checkSystemPanelPresence() {
+    if (!app.find().findSystemPanel()){
+      app.goTo().clickSystemPanelToggle();
+    }
+    assertTrue(app.find().findSystemPanel());
+  }
+
+
 }
